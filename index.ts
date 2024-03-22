@@ -3,7 +3,10 @@ export default {
     const url = new URL(request.url);
     const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
     if (!match) {
-      return new Response("No path is specified", { status: 400 });
+      return Response.redirect(
+        "https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com",
+        307,
+      );
     }
 
     const projectId = match[1].toLowerCase();
