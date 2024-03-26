@@ -4,7 +4,7 @@ export default {
     const url = new URL(request.url);
     const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
     // Case 1: Project ID invalid (not provided)
-    if (!match) {
+    if (!match || match[0] === "/") {
       return Response.redirect(
         "https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com",
         307,
