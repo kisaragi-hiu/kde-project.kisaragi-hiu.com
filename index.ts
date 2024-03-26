@@ -17,10 +17,8 @@ export default {
     const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
     // Case 1: Project ID invalid (not provided)
     if (!match || match[0] === "/") {
-      return Response.redirect(
-        "https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com",
-        307,
-      );
+      const { HomePage } = await import("./pages.tsx");
+      return HTMLResponse(HomePage());
     }
 
     const projectId = match[1].toLowerCase();
