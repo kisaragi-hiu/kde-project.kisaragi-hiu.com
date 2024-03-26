@@ -1,14 +1,5 @@
-function HTMLResponse(
-  body: BodyInit,
-  init: ResponseInit = {}, // this default allows the deconstructing bind below
-) {
-  const { headers, ...rest } = init;
-  // merge the headers and other properties separately
-  return new Response(body, {
-    headers: { "content-type": "text/html;charset=UTF-8", ...headers },
-    ...rest,
-  });
-}
+import * as Pages from "./pages";
+import { HTMLResponse } from "./helpers";
 
 export default {
   // There are only 4 cases: valid -> found or not, invalid -> provided or not
@@ -17,16 +8,14 @@ export default {
     const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
     // Case 1: Project ID invalid (not provided)
     if (!match || match[0] === "/") {
-      const { HomePage } = await import("./pages.tsx");
-      return HTMLResponse(HomePage());
+      return HTMLResponse(Pages.HomePage());
     }
 
     const projectId = match[1].toLowerCase();
     const remainder = match[2];
     // Case 2: Project ID invalid (all other cases)
     if (!projectId.match(/^[a-z0-9-]+$/)) {
-      const { InvalidPage } = await import("./pages.tsx");
-      return HTMLResponse(InvalidPage(), {
+      return HTMLResponse(Pages.InvalidPage(), {
         status: 400,
       });
     }
@@ -43,8 +32,7 @@ export default {
     }
 
     // Case 4: Project ID valid but not found
-    const { NotFoundPage } = await import("./pages.tsx");
-    return new Response("Not found", {
+    return HTMLResponse(Pages.NotFoundPage(), {
       status: 404,
     });
   },
