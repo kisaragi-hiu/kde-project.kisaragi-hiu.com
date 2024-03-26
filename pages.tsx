@@ -2,13 +2,16 @@ import render from "preact-render-to-string";
 import type { VNode } from "preact";
 
 function Page(title: string, ...children: VNode[]) {
-  return render(
-    <html lang="en-US">
-      <head>
-        <title>{title}</title>
-      </head>
-      <body>{...children}</body>
-    </html>,
+  return (
+    "<!DOCTYPE html>" +
+    render(
+      <html lang="en-US">
+        <head>
+          <title>{title}</title>
+        </head>
+        <body>{...children}</body>
+      </html>,
+    )
   );
 }
 
