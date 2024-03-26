@@ -44,7 +44,7 @@ export default {
 
     // Case 4: Project ID valid but not found
     const { NotFoundPage } = await import("./pages.tsx");
-    return HTMLResponse(NotFoundPage(), {
+    return new Response("Not found", {
       status: 404,
     });
   },
