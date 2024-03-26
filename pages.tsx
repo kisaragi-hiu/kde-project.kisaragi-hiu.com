@@ -16,6 +16,12 @@ function Page(title: string, ...children: VNode[]) {
         {/* We don't need meta charset because we've set it in the headers. */}
         <title>{title}</title>
         <meta name="theme-color" content={c_brand1} />
+        {/* @ts-ignore */}
+        {typeof Bun !== "undefined" && (
+          <script>
+            {`new EventSource('/esbuild').addEventListener('change', () => location.reload())`}
+          </script>
+        )}
       </head>
       <body class="max-w-7xl mx-auto px-6 md:px-14 relative bg-background text-gray-12">
         <main class="pt-10 scroll-mt-24">{...children}</main>
