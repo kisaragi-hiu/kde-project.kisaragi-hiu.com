@@ -10,4 +10,4 @@ build:
 #
 # wrangler dev hangs on me for some reason, so this is what I have to do.
 dev:
-	bun --watch bun.ts
+	bun --hot bun.ts

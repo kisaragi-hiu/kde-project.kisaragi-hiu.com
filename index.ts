@@ -8,7 +8,7 @@ export default {
     const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
     // Case 1: Project ID invalid (not provided)
     if (!match || match[0] === "/") {
-      return HTMLResponse(Pages.HomePage());
+      return HTMLResponse(await Pages.HomePage());
     }
 
     const projectId = match[1].toLowerCase();

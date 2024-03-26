@@ -16,6 +16,7 @@ import {
 } from "./radix-breeze-colors";
 
 export default defineConfig({
+  darkMode: true,
   presets: [
     presetTailwindBase({
       colors: {
