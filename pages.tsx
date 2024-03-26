@@ -10,7 +10,7 @@ function BreezeButton(props: { href: string; children: ComponentChildren }) {
       class={cx(
         "border border-solid border-background",
         "hover:border-brand-9 hover:bg-brand-3",
-        "text-center text-inherit rounded-sm transition duration-100",
+        "text-inherit rounded-sm transition duration-100",
         "-ml-2 px-2 py-1.5",
         "flex flex-col items-start justify-start",
       )}
@@ -18,6 +18,20 @@ function BreezeButton(props: { href: string; children: ComponentChildren }) {
     >
       {props.children}
     </a>
+  );
+}
+
+function Header() {
+  return (
+    <>
+      <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
+      <p class="mb-4">
+        By{" "}
+        <a class="text-link hover:underline" href="https://kisaragi-hiu.com/">
+          Kisaragi Hiu
+        </a>
+      </p>
+    </>
   );
 }
 
@@ -49,12 +63,22 @@ function Page(title: string, ...children: ComponentChild[]) {
   return inline("<!DOCTYPE html>" + html);
 }
 
-function Invalid() {
-  return <div>Invalid project ID</div>;
+function Invalid(id?: string) {
+  return (
+    <>
+      <Header />
+      <p>{id ? `${id} is not a valid project ID` : `Invalid project ID`}</p>
+    </>
+  );
 }
 
-function NotFound() {
-  return <div>Project ID is valid but not found</div>;
+function NotFound(id?: string) {
+  return (
+    <>
+      <Header />
+      <p>{id ? `ID "${id}" not found` : "ID not found"}</p>
+    </>
+  );
 }
 
 async function Home() {
@@ -64,14 +88,8 @@ async function Home() {
   console.log("Rendering Home");
   return (
     <>
-      <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
-      <p>
-        By{" "}
-        <a class="text-link hover:underline" href="https://kisaragi-hiu.com/">
-          Kisaragi Hiu
-        </a>
-      </p>
-      <h2 class="font-bold text-xl mt-4 mb-2">Projects list</h2>
+      <Header />
+      <h2 class="font-bold text-xl mb-2">Projects list</h2>
       <ul class="flex flex-col max-w-sm">
         {projects.map((id) => (
           <li>
@@ -83,7 +101,9 @@ async function Home() {
   );
 }
 
-export const InvalidPage = () => Page("Invalid project ID", Invalid());
-export const NotFoundPage = () => Page("Project ID Not Found", NotFound());
+export const InvalidPage = (id?: string) =>
+  Page("Invalid project ID", Invalid(id));
+export const NotFoundPage = (id: string) =>
+  Page("Project ID Not Found", NotFound(id));
 export const HomePage = async () =>
   Page("Kisaragi's KDE Project Redirector", await Home());

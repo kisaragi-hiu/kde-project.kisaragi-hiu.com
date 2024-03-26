@@ -15,7 +15,7 @@ export default {
     const remainder = match[2];
     // Case 2: Project ID invalid (all other cases)
     if (!projectId.match(/^[a-z0-9-]+$/)) {
-      return HTMLResponse(Pages.InvalidPage(), {
+      return HTMLResponse(Pages.InvalidPage(projectId), {
         status: 400,
       });
     }
@@ -32,7 +32,7 @@ export default {
     }
 
     // Case 4: Project ID valid but not found
-    return HTMLResponse(Pages.NotFoundPage(), {
+    return HTMLResponse(Pages.NotFoundPage(projectId), {
       status: 404,
     });
   },
