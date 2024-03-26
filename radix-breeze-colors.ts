@@ -59,4 +59,5 @@ export const breezeblueDark = {
     12: "#eceef0",
   },
   background = "#fcfcfc",
-  backgroundDark = "#1b1e20";
+  backgroundDark = "#1b1e20",
+  link = "#1D99F3";

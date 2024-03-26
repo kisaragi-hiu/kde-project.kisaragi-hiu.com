@@ -6,6 +6,7 @@ import type { ComponentChildren, ComponentChild } from "preact";
 function BreezeButton(props: { href: string; children: ComponentChildren }) {
   return (
     <a
+      target="_blank"
       class={cx(
         "border border-solid border-background",
         "hover:border-brand-9 hover:bg-brand-3",
@@ -64,12 +65,13 @@ async function Home() {
   return (
     <>
       <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
-      <h2>
+      <p>
         By{" "}
-        <a class="text-accent-11" href="https://kisaragi-hiu.com/">
+        <a class="text-link hover:underline" href="https://kisaragi-hiu.com/">
           Kisaragi Hiu
         </a>
-      </h2>
+      </p>
+      <h2 class="font-bold text-xl mt-4 mb-2">Projects list</h2>
       <ul class="flex flex-col max-w-sm">
         {projects.map((id) => (
           <li>

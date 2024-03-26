@@ -7,6 +7,7 @@ import {
   cyanDark,
 } from "@twind/preset-radix-ui/colors";
 import {
+  link,
   breezeblue,
   breezeblueDark,
   gray,
@@ -20,6 +21,7 @@ export default defineConfig({
   presets: [
     presetTailwindBase({
       colors: {
+        link: link,
         brand: breezeblueDark,
         accent: breezeblueDark,
         neutral: grayDark,
