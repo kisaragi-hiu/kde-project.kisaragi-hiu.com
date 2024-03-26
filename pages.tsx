@@ -4,19 +4,21 @@ import twindConfig from "./twind.config";
 import type { VNode } from "preact";
 
 function Page(title: string, ...children: VNode[]) {
-  install(twindConfig);
+  const tw = install(twindConfig);
+  // tw.theme("colors...") is typed to return a ColorValue, which is a string or
+  // a function returning a string. However, that's just what the configuration
+  // allows, and tw.theme actually always returns a string in this case. So the
+  // type cast is safe, and the types are wrong.
+  const c_brand1 = tw.theme("colors.brand.1") as string;
   const html = render(
     <html lang="en-US">
       <head>
         {/* We don't need meta charset because we've set it in the headers. */}
         <title>{title}</title>
+        <meta name="theme-color" content={c_brand1} />
       </head>
-      <body>
-        <div class="max-w-8xl mx-auto px-4 relative">
-          <div class="px-2 md:px-10">
-            <main>{...children}</main>
-          </div>
-        </div>
+      <body class="max-w-7xl mx-auto px-6 md:px-14 relative bg-background text-brand-11">
+        <main class="pt-10 scroll-mt-24">{...children}</main>
       </body>
     </html>,
   );
