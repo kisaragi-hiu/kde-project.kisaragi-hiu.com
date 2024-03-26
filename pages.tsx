@@ -11,7 +11,13 @@ function Page(title: string, ...children: VNode[]) {
         {/* We don't need meta charset because we've set it in the headers. */}
         <title>{title}</title>
       </head>
-      <body>{...children}</body>
+      <body>
+        <div class="max-w-8xl mx-auto px-4 relative">
+          <div class="px-2 md:px-10">
+            <main>{...children}</main>
+          </div>
+        </div>
+      </body>
     </html>,
   );
   return inline("<!DOCTYPE html>" + html);
