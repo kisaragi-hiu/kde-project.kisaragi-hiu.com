@@ -17,7 +17,7 @@ function Page(title: string, ...children: VNode[]) {
         <title>{title}</title>
         <meta name="theme-color" content={c_brand1} />
       </head>
-      <body class="max-w-7xl mx-auto px-6 md:px-14 relative bg-background text-brand-11">
+      <body class="max-w-7xl mx-auto px-6 md:px-14 relative bg-background text-gray-12">
         <main class="pt-10 scroll-mt-24">{...children}</main>
       </body>
     </html>,
@@ -36,7 +36,7 @@ function NotFound() {
 function Home() {
   return (
     <>
-      <h1>Quick redirector for KDE Projects</h1>
+      <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
       <h2>
         By <a href="https://kisaragi-hiu.com/">Kisaragi Hiu</a>
       </h2>

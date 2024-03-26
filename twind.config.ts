@@ -1,6 +1,11 @@
 import { defineConfig } from "@twind/core";
 import presetTailwindBase from "@twind/preset-tailwind/base";
-import { tomato, green, amber, cyan } from "@twind/preset-radix-ui/colors";
+import {
+  tomatoDark,
+  greenDark,
+  amberDark,
+  cyanDark,
+} from "@twind/preset-radix-ui/colors";
 import {
   breezeblue,
   breezeblueDark,
@@ -14,18 +19,18 @@ export default defineConfig({
   presets: [
     presetTailwindBase({
       colors: {
-        brand: breezeblue,
-        accent: breezeblue,
-        neutral: gray,
-        background: background,
+        brand: breezeblueDark,
+        accent: breezeblueDark,
+        neutral: grayDark,
+        background: backgroundDark,
         // Error: Red/Tomato/Crimson
-        error: tomato,
+        error: tomatoDark,
         // Success: Teal/Green/Grass/Mint
-        success: green,
+        success: greenDark,
         // Warning: Yellow/Amber
-        warning: amber,
+        warning: amberDark,
         // Info: Blue/Sky/Cyan
-        info: cyan,
+        info: cyanDark,
       },
     }),
   ],
