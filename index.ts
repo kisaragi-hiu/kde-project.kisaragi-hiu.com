@@ -1,3 +1,15 @@
+function HTMLResponse(
+  body: BodyInit,
+  init: ResponseInit = {}, // this default allows the deconstructing bind below
+) {
+  const { headers, ...rest } = init;
+  // merge the headers and other properties separately
+  return new Response(body, {
+    headers: { "content-type": "text/html;charset=UTF-8", ...headers },
+    ...rest,
+  });
+}
+
 export default {
   // There are only 4 cases: valid -> found or not, invalid -> provided or not
   async fetch(request: Request): Promise<Response> {
@@ -15,8 +27,10 @@ export default {
     const remainder = match[2];
     // Case 2: Project ID invalid (all other cases)
     if (!projectId.match(/^[a-z0-9-]+$/)) {
-      const { test } = await import("./pages.tsx");
-      return new Response(`Invalid project ID; ${test()}`, { status: 400 });
+      const { InvalidPage } = await import("./pages.tsx");
+      return HTMLResponse(InvalidPage(), {
+        status: 400,
+      });
     }
 
     const response = await fetch(
@@ -31,6 +45,9 @@ export default {
     }
 
     // Case 4: Project ID valid but not found
-    return new Response("Not found", { status: 404 });
+    const { NotFoundPage } = await import("./pages.tsx");
+    return HTMLResponse(NotFoundPage(), {
+      status: 404,
+    });
   },
 } satisfies ExportedHandler;
