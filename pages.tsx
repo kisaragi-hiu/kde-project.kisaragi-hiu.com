@@ -1,18 +1,20 @@
 import render from "preact-render-to-string";
+import { install, inline } from "@twind/core";
+import twindConfig from "./twind.config";
 import type { VNode } from "preact";
 
 function Page(title: string, ...children: VNode[]) {
-  return (
-    "<!DOCTYPE html>" +
-    render(
-      <html lang="en-US">
-        <head>
-          <title>{title}</title>
-        </head>
-        <body>{...children}</body>
-      </html>,
-    )
+  install(twindConfig);
+  const html = render(
+    <html lang="en-US">
+      <head>
+        {/* We don't need meta charset because we've set it in the headers. */}
+        <title>{title}</title>
+      </head>
+      <body>{...children}</body>
+    </html>,
   );
+  return inline("<!DOCTYPE html>" + html);
 }
 
 function Invalid() {
