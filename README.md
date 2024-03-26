@@ -8,3 +8,5 @@ A redirection service from a KDE project ID to KDE Invent. Probably most useful 
 This is IMO the one thing missing from projects.kde.org/api.
 
 Runs on Cloudflare Workers because it's so easy to deploy.
+
+[Wrangler bundles code for us using esbuild](https://developers.cloudflare.com/workers/wrangler/bundling/), so we don't need to worry about bundling ourselves.

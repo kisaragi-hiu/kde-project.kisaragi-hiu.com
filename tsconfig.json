@@ -1,15 +1,29 @@
 {
   "compilerOptions": {
-    "noEmit": true,
-    "module": "esnext",
-    "target": "esnext",
     "lib": ["esnext"],
+    "target": "esnext",
+    "module": "esnext",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
 
     "strict": true,
-    "noImplicitAny": false,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
 
-    "types": ["@cloudflare/workers-types"]
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    "types": ["@cloudflare/workers-types"],
+
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
   }
 }

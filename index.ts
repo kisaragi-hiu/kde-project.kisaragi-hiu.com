@@ -15,7 +15,8 @@ export default {
     const remainder = match[2];
     // Case 2: Project ID invalid (all other cases)
     if (!projectId.match(/^[a-z0-9-]+$/)) {
-      return new Response("Invalid project ID", { status: 400 });
+      const { test } = await import("./pages.tsx");
+      return new Response(`Invalid project ID; ${test()}`, { status: 400 });
     }
 
     const response = await fetch(
