@@ -1,9 +1,11 @@
 import render from "preact-render-to-string";
 import { install, inline, cx } from "@twind/core";
 import twindConfig from "./twind.config";
-import type { ComponentChildren, ComponentChild } from "preact";
 import { inventUrl } from "./helpers";
-import { projects } from "./built/projects.json";
+import { groupedProjects, groups } from "./built/projects.json";
+
+import type { ComponentChildren, ComponentChild } from "preact";
+import type { Project, Group } from "./helpers";
 
 function BreezeButton(props: { href: string; children: ComponentChildren }) {
   return (
@@ -12,7 +14,9 @@ function BreezeButton(props: { href: string; children: ComponentChildren }) {
       class={cx(
         "border border-solid border-background",
         "hover:border-brand-9 hover:bg-brand-3",
-        "text-inherit rounded-sm transition duration-100",
+        "focus-visible:outline-none",
+        "focus-visible:border-brand-9 focus-visible:bg-brand-3",
+        "text-inherit rounded-sm",
         "-ml-2 px-2 py-1.5",
         "flex flex-col items-start justify-start",
       )}
@@ -20,20 +24,6 @@ function BreezeButton(props: { href: string; children: ComponentChildren }) {
     >
       {props.children}
     </a>
-  );
-}
-
-function Header() {
-  return (
-    <>
-      <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
-      <p class="mb-4">
-        By{" "}
-        <a class="text-link hover:underline" href="https://kisaragi-hiu.com/">
-          Kisaragi Hiu
-        </a>
-      </p>
-    </>
   );
 }
 
@@ -57,8 +47,26 @@ function Page(title: string, ...children: ComponentChild[]) {
           </script>
         )}
       </head>
-      <body class="max-w-7xl mx-auto px-6 md:px-14 relative bg-background">
-        <main class="pt-10 scroll-mt-24 text-neutral-12">{...children}</main>
+      <body class="relative bg-background text-neutral-12">
+        <div
+          class={cx(
+            "max-w-7xl mx-auto px-6 md:px-14 pt-10 pb-2 mb-4",
+            "scroll-mt-24 bg-[#31363B]",
+            "border-b border-neutral-9",
+          )}
+        >
+          <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
+          <p>
+            By{" "}
+            <a
+              class="text-link hover:underline"
+              href="https://kisaragi-hiu.com/"
+            >
+              Kisaragi Hiu
+            </a>
+          </p>
+        </div>
+        <main class="max-w-7xl mx-auto px-6 md:px-14">{...children}</main>
       </body>
     </html>,
   );
@@ -68,7 +76,6 @@ function Page(title: string, ...children: ComponentChild[]) {
 function Invalid(id?: string) {
   return (
     <>
-      <Header />
       <p>{id ? `${id} is not a valid project ID` : `Invalid project ID`}</p>
     </>
   );
@@ -77,28 +84,45 @@ function Invalid(id?: string) {
 function NotFound(id?: string) {
   return (
     <>
-      <Header />
       <p>{id ? `ID "${id}" not found` : "ID not found"}</p>
     </>
   );
 }
 
 async function Home() {
-  console.log("Rendering Home");
+  // Main
   return (
     <>
-      <Header />
-      <h2 class="font-bold text-xl mb-2">Projects list</h2>
-      <ul class="flex flex-col">
-        {projects.map((project) => (
-          <li>
-            <BreezeButton href={inventUrl(project.repopath)}>
-              <div class="font-bold">{project.identifier}</div>
-              <div>{project.description}</div>
-            </BreezeButton>
-          </li>
-        ))}
-      </ul>
+      <h2 class="font-bold text-xl mt-8 mb-4">Projects list</h2>
+      {(groupedProjects as [string, Project[]][]).map(([groupId, projects]) => {
+        const group = (groups as Record<string, Group>)[groupId];
+        return (
+          <>
+            <h3
+              id={`group-${group.identifier}`}
+              class="flex text-neutral-11 space-x-2 items-center mb-1 mt-2"
+            >
+              <span class="font-bold">{group.name}</span>
+              <span class="border-b border-neutral-10 flex-grow"></span>
+            </h3>
+            {/* <p>{group.description}</p> */}
+            <ul class="flex flex-col">
+              {projects.map((project) => (
+                <li>
+                  <BreezeButton href={inventUrl(project.repopath)}>
+                    <div class="font-bold">{project.identifier}</div>
+                    <div>
+                      {project.description.length === 0
+                        ? project.repopath
+                        : project.repopath + ": " + project.description}
+                    </div>
+                  </BreezeButton>
+                </li>
+              ))}
+            </ul>
+          </>
+        );
+      })}
     </>
   );
 }

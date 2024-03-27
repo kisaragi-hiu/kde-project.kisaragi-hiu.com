@@ -22,7 +22,7 @@ const groupfiles = readdirSync(groupsDir, {
 
 const idToRepo: Record<string, string> = {};
 const projects: Project[] = [];
-const groups: Group[] = [];
+const groups: Record<string, Group> = {};
 
 for (const metafile of metafiles) {
   const repopath = path.dirname(metafile);
@@ -37,13 +37,18 @@ for (const metafile of metafiles) {
   projects.push({ name, description, identifier, repopath, group });
 }
 
+projects.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
+
+const groupedProjects = [...Map.groupBy(projects, (p) => p.group)];
+groupedProjects.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+
 for (const groupfile of groupfiles) {
   const identifier = path.basename(path.dirname(groupfile));
   const metadata = yaml.load(
     await Bun.file(path.join(groupsDir, groupfile)).text(),
   ) as GroupMetadata;
   const { name, description } = metadata;
-  groups.push({ name, description, identifier });
+  groups[identifier] = { name, description, identifier };
 }
 
-console.log(JSON.stringify({ idToRepo, projects, groups }));
+console.log(JSON.stringify({ idToRepo, groupedProjects, groups }));
