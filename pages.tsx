@@ -84,11 +84,9 @@ function Page(title: string, ...children: ComponentChild[]) {
               Quick redirector for KDE Projects
             </h1>
             <p>
-              By <Out href="https://kisaragi-hiu.com/">Kisaragi Hiu</Out>
-            </p>
-            <p>
+              © 2024 <Out href="https://kisaragi-hiu.com/">Kisaragi Hiu</Out> @{" "}
               <Out href="https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com">
-                https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com
+                GitHub
               </Out>
             </p>
           </div>
@@ -120,6 +118,13 @@ async function Home() {
   // Main
   return (
     <>
+      <p>
+        Uses data from{" "}
+        <Out href="https://invent.kde.org/sysadmin/repo-metadata/">
+          sysadmin/repo-metadata
+        </Out>
+        .
+      </p>
       <h2 id="groups" class="font-bold text-xl mt-8 mb-4">
         Groups
       </h2>

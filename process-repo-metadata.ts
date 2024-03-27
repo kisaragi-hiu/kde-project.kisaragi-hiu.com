@@ -22,7 +22,7 @@ const groupfiles = readdirSync(groupsDir, {
 
 const idToRepo: Record<string, string> = {};
 const projects: Project[] = [];
-const groupIds: string[] = [];
+const groupIds: Set<string> = new Set();
 const groups: Record<string, Group> = {};
 
 for (const metafile of metafiles) {
@@ -67,14 +67,19 @@ for (const groupfile of groupfiles) {
           identifier: "docs-and-websites",
         }
       : { name, description, identifier };
-  groupIds.push(morphedGroup.identifier);
+  groupIds.add(morphedGroup.identifier);
   groups[morphedGroup.identifier] = morphedGroup;
 }
 
-groupIds.sort((a, b) => {
-  if (a === "unmaintained") return 1;
-  if (b === "unmaintained") return -1;
-  return a < b ? -1 : 1;
-});
-
-console.log(JSON.stringify({ idToRepo, groupedProjects, groupIds, groups }));
+console.log(
+  JSON.stringify({
+    idToRepo,
+    groupedProjects,
+    groupIds: [...groupIds].sort((a, b) => {
+      if (a === "unmaintained") return 1;
+      if (b === "unmaintained") return -1;
+      return a < b ? -1 : 1;
+    }),
+    groups,
+  }),
+);
