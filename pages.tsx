@@ -2,6 +2,8 @@ import render from "preact-render-to-string";
 import { install, inline, cx } from "@twind/core";
 import twindConfig from "./twind.config";
 import type { ComponentChildren, ComponentChild } from "preact";
+import { inventUrl } from "./helpers";
+import { projects } from "./built/projects.json";
 
 function BreezeButton(props: { href: string; children: ComponentChildren }) {
   return (
@@ -82,18 +84,18 @@ function NotFound(id?: string) {
 }
 
 async function Home() {
-  const projects = (await fetch(
-    "https://projects.kde.org/api/v1/identifiers",
-  ).then((r) => r.json())) as string[];
   console.log("Rendering Home");
   return (
     <>
       <Header />
       <h2 class="font-bold text-xl mb-2">Projects list</h2>
-      <ul class="flex flex-col max-w-sm">
-        {projects.map((id) => (
+      <ul class="flex flex-col">
+        {projects.map((project) => (
           <li>
-            <BreezeButton href={`/${id}`}>{id}</BreezeButton>
+            <BreezeButton href={inventUrl(project.repopath)}>
+              <div class="font-bold">{project.identifier}</div>
+              <div>{project.description}</div>
+            </BreezeButton>
           </li>
         ))}
       </ul>

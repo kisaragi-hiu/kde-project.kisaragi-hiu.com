@@ -41,3 +41,11 @@ export function HTMLResponse(
     ...rest,
   });
 }
+
+export function inventUrl(
+  repo: string,
+  remainder: string = "",
+  ...etc: string[]
+) {
+  return `https://invent.kde.org/${repo}/${remainder}` + etc.join("");
+}

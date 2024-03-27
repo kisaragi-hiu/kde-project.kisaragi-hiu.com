@@ -1,5 +1,5 @@
 import * as Pages from "./pages";
-import { HTMLResponse } from "./helpers";
+import { HTMLResponse, inventUrl } from "./helpers";
 import { idToRepo } from "./built/projects.json";
 
 export default {
@@ -24,8 +24,7 @@ export default {
     const repo = (idToRepo as Record<string, string>)[projectId];
     // Case 3: Project ID valid and found
     if (typeof repo === "string") {
-      const newUrl =
-        `https://invent.kde.org/${repo}/${remainder}` + url.search + url.hash;
+      const newUrl = inventUrl(repo, remainder, url.search, url.hash);
       return Response.redirect(newUrl, 307);
     }
 
