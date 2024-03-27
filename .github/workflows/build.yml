@@ -1,0 +1,19 @@
+name: Deploy on push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  "build":
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install -p
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: make deploy
