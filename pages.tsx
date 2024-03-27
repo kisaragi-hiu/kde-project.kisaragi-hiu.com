@@ -82,7 +82,7 @@ function Page(title: string, ...children: ComponentChild[]) {
             </a>
           </p>
         </div>
-        <main class="max-w-7xl mx-auto px-6 md:px-14">{...children}</main>
+        <main class="max-w-7xl mx-auto px-6 md:px-14 pb-8">{...children}</main>
       </body>
     </html>,
   );
