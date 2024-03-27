@@ -7,6 +7,17 @@ import { groupedProjects, groups } from "./built/projects.json";
 import type { ComponentChildren, ComponentChild } from "preact";
 import type { Project, Group } from "./helpers";
 
+function Chip(props: { href: string; children: ComponentChildren }) {
+  return (
+    <a
+      class={cx("rounded-sm bg-neutral-3 py-1.5 px-2.5", "hover:bg-brand-8")}
+      href={props.href}
+    >
+      {props.children}
+    </a>
+  );
+}
+
 function BreezeButton(props: { href: string; children: ComponentChildren }) {
   return (
     <a
@@ -93,6 +104,16 @@ async function Home() {
   // Main
   return (
     <>
+      <h2 id="groups" class="font-bold text-xl mt-8 mb-4">
+        Groups
+      </h2>
+      <ul class="flex flex-wrap gap-x-2.5 gap-y-5">
+        {Object.values(groups).map((group) => (
+          <li>
+            <Chip href={`#group-${group.identifier}`}>{group.name}</Chip>
+          </li>
+        ))}
+      </ul>
       <h2 class="font-bold text-xl mt-8 mb-4">Projects list</h2>
       {(groupedProjects as [string, Project[]][]).map(([groupId, projects]) => {
         const group = (groups as Record<string, Group>)[groupId];
@@ -102,7 +123,9 @@ async function Home() {
               id={`group-${group.identifier}`}
               class="flex text-neutral-11 space-x-2 items-center mb-1 mt-2"
             >
-              <span class="font-bold">{group.name}</span>
+              <a href="#groups" class="font-bold hover:underline">
+                {group.name}
+              </a>
               <span class="border-b border-neutral-10 flex-grow"></span>
             </h3>
             {/* <p>{group.description}</p> */}
