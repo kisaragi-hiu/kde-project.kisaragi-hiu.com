@@ -7,6 +7,14 @@ import { groupedProjects, groups, groupIds } from "./built/projects.json";
 import type { ComponentChildren, ComponentChild } from "preact";
 import type { Project, Group } from "./helpers";
 
+function Out(props: { href: string; children: ComponentChildren }) {
+  return (
+    <a href={props.href} target="_blank" class="text-link hover:underline">
+      {props.children}
+    </a>
+  );
+}
+
 function Chip(props: {
   title?: string;
   href: string;
@@ -66,21 +74,24 @@ function Page(title: string, ...children: ComponentChild[]) {
       <body class="relative bg-background text-neutral-12">
         <div
           class={cx(
-            "max-w-7xl mx-auto px-6 md:px-14 pt-10 pb-2 mb-4",
+            "pt-10 pb-2 mb-4",
             "scroll-mt-24 bg-[#31363B]",
             "border-b border-neutral-9",
           )}
         >
-          <h1 class="font-bold text-2xl">Quick redirector for KDE Projects</h1>
-          <p>
-            By{" "}
-            <a
-              class="text-link hover:underline"
-              href="https://kisaragi-hiu.com/"
-            >
-              Kisaragi Hiu
-            </a>
-          </p>
+          <div class="max-w-7xl mx-auto px-6 md:px-14">
+            <h1 class="font-bold text-2xl">
+              Quick redirector for KDE Projects
+            </h1>
+            <p>
+              By <Out href="https://kisaragi-hiu.com/">Kisaragi Hiu</Out>
+            </p>
+            <p>
+              <Out href="https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com">
+                https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com
+              </Out>
+            </p>
+          </div>
         </div>
         <main class="max-w-7xl mx-auto px-6 md:px-14 pb-8">{...children}</main>
       </body>
