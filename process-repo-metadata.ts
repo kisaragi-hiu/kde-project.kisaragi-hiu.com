@@ -22,6 +22,7 @@ const groupfiles = readdirSync(groupsDir, {
 
 const idToRepo: Record<string, string> = {};
 const projects: Project[] = [];
+const groupIds: string[] = [];
 const groups: Record<string, Group> = {};
 
 for (const metafile of metafiles) {
@@ -31,16 +32,26 @@ for (const metafile of metafiles) {
     await Bun.file(path.join(projectsDir, metafile)).text(),
   ) as ProjectMetadata;
 
+  const morphedGroup =
+    group === "documentation" || group === "websites"
+      ? "docs-and-websites"
+      : group;
+
   const { name, description, identifier } = metadata;
 
   idToRepo[identifier] = repopath;
-  projects.push({ name, description, identifier, repopath, group });
+  projects.push({
+    name,
+    description,
+    identifier,
+    repopath,
+    group: morphedGroup,
+  });
 }
 
 projects.sort((a, b) => (a.identifier < b.identifier ? -1 : 1));
 
-const groupedProjects = [...Map.groupBy(projects, (p) => p.group)];
-groupedProjects.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+const groupedProjects = Object.groupBy(projects, (p) => p.group);
 
 for (const groupfile of groupfiles) {
   const identifier = path.basename(path.dirname(groupfile));
@@ -48,7 +59,22 @@ for (const groupfile of groupfiles) {
     await Bun.file(path.join(groupsDir, groupfile)).text(),
   ) as GroupMetadata;
   const { name, description } = metadata;
-  groups[identifier] = { name, description, identifier };
+  const morphedGroup =
+    identifier === "documentation" || identifier === "websites"
+      ? {
+          name: "Documentation and Websites",
+          description: `(unofficial group) KDE software docs and websites`,
+          identifier: "docs-and-websites",
+        }
+      : { name, description, identifier };
+  groupIds.push(morphedGroup.identifier);
+  groups[morphedGroup.identifier] = morphedGroup;
 }
 
-console.log(JSON.stringify({ idToRepo, groupedProjects, groups }));
+groupIds.sort((a, b) => {
+  if (a === "unmaintained") return 1;
+  if (b === "unmaintained") return -1;
+  return a < b ? -1 : 1;
+});
+
+console.log(JSON.stringify({ idToRepo, groupedProjects, groupIds, groups }));

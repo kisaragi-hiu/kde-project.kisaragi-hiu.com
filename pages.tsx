@@ -2,16 +2,21 @@ import render from "preact-render-to-string";
 import { install, inline, cx } from "@twind/core";
 import twindConfig from "./twind.config";
 import { inventUrl } from "./helpers";
-import { groupedProjects, groups } from "./built/projects.json";
+import { groupedProjects, groups, groupIds } from "./built/projects.json";
 
 import type { ComponentChildren, ComponentChild } from "preact";
 import type { Project, Group } from "./helpers";
 
-function Chip(props: { href: string; children: ComponentChildren }) {
+function Chip(props: {
+  title?: string;
+  href: string;
+  children: ComponentChildren;
+}) {
   return (
     <a
       class={cx("rounded-sm bg-neutral-3 py-1.5 px-2.5", "hover:bg-brand-8")}
       href={props.href}
+      title={props.title}
     >
       {props.children}
     </a>
@@ -108,15 +113,23 @@ async function Home() {
         Groups
       </h2>
       <ul class="flex flex-wrap gap-x-2.5 gap-y-5">
-        {Object.values(groups).map((group) => (
-          <li>
-            <Chip href={`#group-${group.identifier}`}>{group.name}</Chip>
-          </li>
-        ))}
+        {groupIds.map((id) => {
+          const group = (groups as Record<string, Group>)[id];
+          return (
+            <li>
+              <Chip title={group.description} href={`#group-${id}`}>
+                {group.name}
+              </Chip>
+            </li>
+          );
+        })}
       </ul>
       <h2 class="font-bold text-xl mt-8 mb-4">Projects list</h2>
-      {(groupedProjects as [string, Project[]][]).map(([groupId, projects]) => {
+      {groupIds.map((groupId) => {
         const group = (groups as Record<string, Group>)[groupId];
+        const projects = (groupedProjects as Record<string, Project[]>)[
+          groupId
+        ];
         return (
           <>
             <h3
