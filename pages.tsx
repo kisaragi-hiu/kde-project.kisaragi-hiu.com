@@ -162,7 +162,10 @@ async function Home() {
               {projects.map((project) => (
                 <li>
                   <BreezeButton href={inventUrl(project.repopath)}>
-                    <div class="font-bold">{project.identifier}</div>
+                    <div>
+                      <span class="font-bold">{project.identifier}</span>
+                      <span>・{project.name}</span>
+                    </div>
                     {project.description.length === 0 ? (
                       <div class="italic">No description</div>
                     ) : (
@@ -180,8 +183,11 @@ async function Home() {
 }
 
 export const InvalidPage = (id?: string) =>
-  Page("Invalid project ID", Invalid(id));
+  Page("Invalid project ID | Kisaragi's KDE Project Redirector", Invalid(id));
 export const NotFoundPage = (id: string) =>
-  Page("Project ID Not Found", NotFound(id));
+  Page(
+    "Project ID Not Found | Kisaragi's KDE Project Redirector",
+    NotFound(id),
+  );
 export const HomePage = async () =>
   Page("Kisaragi's KDE Project Redirector", await Home());

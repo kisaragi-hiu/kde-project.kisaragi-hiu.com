@@ -12,7 +12,7 @@ export default {
       return HTMLResponse(await Pages.HomePage());
     }
 
-    const projectId = match[1].toLowerCase();
+    const projectId = decodeURIComponent(match[1].toLowerCase());
     const remainder = match[2];
     // Case 2: Project ID invalid (all other cases)
     if (!projectId.match(/^[a-z0-9-]+$/)) {
