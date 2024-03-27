@@ -1,5 +1,6 @@
 import * as Pages from "./pages";
 import { HTMLResponse } from "./helpers";
+import { idToRepo } from "./built/projects.json";
 
 export default {
   // There are only 4 cases: valid -> found or not, invalid -> provided or not
@@ -20,10 +21,7 @@ export default {
       });
     }
 
-    const response = await fetch(
-      `https://projects.kde.org/api/v1/identifier/${projectId}`,
-    );
-    const repo = ((await response.json()) as { repo?: string })?.repo;
+    const repo = (idToRepo as Record<string, string>)[projectId];
     // Case 3: Project ID valid and found
     if (typeof repo === "string") {
       const newUrl =

@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true,
 
-    "types": ["@cloudflare/workers-types"],
+    "types": ["@cloudflare/workers-types", "node", "bun"],
 
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
