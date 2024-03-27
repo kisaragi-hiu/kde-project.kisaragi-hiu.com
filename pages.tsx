@@ -111,11 +111,11 @@ async function Home() {
                 <li>
                   <BreezeButton href={inventUrl(project.repopath)}>
                     <div class="font-bold">{project.identifier}</div>
-                    <div>
-                      {project.description.length === 0
-                        ? project.repopath
-                        : project.repopath + ": " + project.description}
-                    </div>
+                    {project.description.length === 0 ? (
+                      <div class="italic">No description</div>
+                    ) : (
+                      project.description
+                    )}
                   </BreezeButton>
                 </li>
               ))}
