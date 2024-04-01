@@ -7,7 +7,7 @@ import path from "node:path";
 
 import yaml from "js-yaml";
 
-import type { Project, ProjectMetadata, Group, GroupMetadata } from "./helpers";
+import type { Group, GroupMetadata, Project, ProjectMetadata } from "./helpers";
 
 const projectsDir = "repo-metadata/projects-invent";
 const groupsDir = "repo-metadata/group-metadata";
@@ -63,7 +63,7 @@ for (const groupfile of groupfiles) {
     identifier === "documentation" || identifier === "websites"
       ? {
           name: "Documentation and Websites",
-          description: `(unofficial group) KDE software docs and websites`,
+          description: "(unofficial group) KDE software docs and websites",
           identifier: "docs-and-websites",
         }
       : { name, description, identifier };

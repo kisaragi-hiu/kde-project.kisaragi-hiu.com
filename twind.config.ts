@@ -1,19 +1,19 @@
 import { defineConfig } from "@twind/core";
-import presetTailwindBase from "@twind/preset-tailwind/base";
 import {
-  tomatoDark,
-  greenDark,
   amberDark,
   cyanDark,
+  greenDark,
+  tomatoDark,
 } from "@twind/preset-radix-ui/colors";
+import presetTailwindBase from "@twind/preset-tailwind/base";
 import {
-  link,
+  background,
+  backgroundDark,
   breezeblue,
   breezeblueDark,
   gray,
   grayDark,
-  background,
-  backgroundDark,
+  link,
 } from "./radix-breeze-colors";
 
 export default defineConfig({

@@ -25,11 +25,11 @@ export default {
         return new Response("event: change\ndata: changed\n\n", {
           headers: headers,
         });
-      } else {
-        return new Response(":\n\n", {
-          headers: headers,
-        });
       }
+
+      return new Response(":\n\n", {
+        headers: headers,
+      });
     }
     return handlerFetch(request);
   },

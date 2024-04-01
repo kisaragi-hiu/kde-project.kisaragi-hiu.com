@@ -22,7 +22,10 @@
       "style": {
         "useTemplate": "off",
         "noNonNullAssertion": "off",
-        "useNamingConvention": "warn"
+        "useNamingConvention": {
+          "level": "warn",
+          "options": { "strictCase": true, "requireAscii": false }
+        }
       },
       "suspicious": { "noExplicitAny": "off" }
     }

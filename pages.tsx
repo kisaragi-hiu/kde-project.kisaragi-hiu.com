@@ -1,15 +1,20 @@
+import { cx, inline, install } from "@twind/core";
 import render from "preact-render-to-string";
-import { install, inline, cx } from "@twind/core";
-import twindConfig from "./twind.config";
+import { groupIds, groupedProjects, groups } from "./built/projects.json";
 import { inventUrl } from "./helpers";
-import { groupedProjects, groups, groupIds } from "./built/projects.json";
+import twindConfig from "./twind.config";
 
-import type { ComponentChildren, ComponentChild } from "preact";
-import type { Project, Group } from "./helpers";
+import type { ComponentChild, ComponentChildren } from "preact";
+import type { Group, Project } from "./helpers";
 
 function Out(props: { href: string; children: ComponentChildren }) {
   return (
-    <a href={props.href} target="_blank" class="text-link hover:underline">
+    <a
+      href={props.href}
+      target="_blank"
+      rel="noreferrer"
+      class="text-link hover:underline"
+    >
       {props.children}
     </a>
   );
@@ -35,6 +40,7 @@ function BreezeButton(props: { href: string; children: ComponentChildren }) {
   return (
     <a
       target="_blank"
+      rel="noreferrer"
       class={cx(
         "border border-solid border-background",
         "hover:border-brand-9 hover:bg-brand-3",
@@ -57,13 +63,13 @@ function Page(title: string, ...children: ComponentChild[]) {
   // a function returning a string. However, that's just what the configuration
   // allows, and tw.theme actually always returns a string in this case. So the
   // type cast is safe, and the types are wrong.
-  const c_brand1 = tw.theme("colors.brand.1") as string;
+  const cBrand1 = tw.theme("colors.brand.1") as string;
   const html = render(
     <html lang="en-US">
       <head>
         {/* We don't need meta charset because we've set it in the headers. */}
         <title>{title}</title>
-        <meta name="theme-color" content={c_brand1} />
+        <meta name="theme-color" content={cBrand1} />
         {/* @ts-ignore */}
         {typeof Bun !== "undefined" && (
           <script>
@@ -101,7 +107,7 @@ function Page(title: string, ...children: ComponentChild[]) {
 function Invalid(id?: string) {
   return (
     <>
-      <p>{id ? `${id} is not a valid project ID` : `Invalid project ID`}</p>
+      <p>{id ? `${id} is not a valid project ID` : "Invalid project ID"}</p>
     </>
   );
 }
@@ -155,7 +161,7 @@ async function Home() {
               <a href="#groups" class="font-bold hover:underline">
                 {group.name}
               </a>
-              <span class="border-b border-neutral-10 flex-grow"></span>
+              <span class="border-b border-neutral-10 flex-grow" />
             </h3>
             {/* <p>{group.description}</p> */}
             <ul class="flex flex-col">

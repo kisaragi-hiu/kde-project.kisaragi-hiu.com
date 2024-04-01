@@ -1,6 +1,6 @@
-import * as Pages from "./pages";
-import { HTMLResponse, inventUrl } from "./helpers";
 import { idToRepo } from "./built/projects.json";
+import { htmlResponse, inventUrl } from "./helpers";
+import * as Pages from "./pages";
 
 export default {
   // There are only 4 cases: valid -> found or not, invalid -> provided or not
@@ -9,14 +9,14 @@ export default {
     const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
     // Case 1: Project ID invalid (not provided)
     if (!match || match[0] === "/") {
-      return HTMLResponse(await Pages.HomePage());
+      return htmlResponse(await Pages.HomePage());
     }
 
     const projectId = decodeURIComponent(match[1].toLowerCase());
     const remainder = match[2];
     // Case 2: Project ID invalid (all other cases)
     if (!projectId.match(/^[a-z0-9-]+$/)) {
-      return HTMLResponse(Pages.InvalidPage(projectId), {
+      return htmlResponse(Pages.InvalidPage(projectId), {
         status: 400,
       });
     }
@@ -29,7 +29,7 @@ export default {
     }
 
     // Case 4: Project ID valid but not found
-    return HTMLResponse(Pages.NotFoundPage(projectId), {
+    return htmlResponse(Pages.NotFoundPage(projectId), {
       status: 404,
     });
   },

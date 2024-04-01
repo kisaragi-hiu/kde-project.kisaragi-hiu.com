@@ -30,7 +30,7 @@ export interface Group {
   identifier: string;
 }
 
-export function HTMLResponse(
+export function htmlResponse(
   body: BodyInit,
   init: ResponseInit = {}, // this default allows the deconstructing bind below
 ) {
@@ -42,10 +42,6 @@ export function HTMLResponse(
   });
 }
 
-export function inventUrl(
-  repo: string,
-  remainder: string = "",
-  ...etc: string[]
-) {
+export function inventUrl(repo: string, remainder = "", ...etc: string[]) {
   return `https://invent.kde.org/${repo}/${remainder}` + etc.join("");
 }
