@@ -12,6 +12,7 @@
     "wrangler": "^3.36.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.6.3",
     "@cloudflare/workers-types": "^4.20240320.1",
     "@types/bun": "^1.0.11",
     "@types/js-yaml": "^4.0.9",

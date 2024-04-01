@@ -3,6 +3,9 @@ deps = built/projects.json
 deploy: $(deps)
 	bunx wrangler deploy
 
+lint: $(deps)
+	bunx @biomejs/biome lint "."
+
 build: $(deps)
 	bunx wrangler deploy --outdir built --dry-run
 
