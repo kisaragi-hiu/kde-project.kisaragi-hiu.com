@@ -18,6 +18,12 @@ import {
 
 export default defineConfig({
   darkMode: true,
+  theme: {
+    fontFamily: {
+      sans: ["Noto Sans", "sans-serif"],
+      mono: ["Iosevka", "monospace"],
+    },
+  },
   presets: [
     presetTailwindBase({
       colors: {

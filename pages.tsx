@@ -7,7 +7,7 @@ import twindConfig from "./twind.config";
 import type { ComponentChild, ComponentChildren } from "preact";
 import type { Group, Project } from "./helpers";
 
-function Out(props: { href: string; children: ComponentChildren }) {
+function Out(props: { href: string; children?: ComponentChildren }) {
   return (
     <a
       href={props.href}
@@ -15,7 +15,7 @@ function Out(props: { href: string; children: ComponentChildren }) {
       rel="noreferrer"
       class="text-link hover:underline"
     >
-      {props.children}
+      {props.children || props.href}
     </a>
   );
 }
@@ -129,6 +129,25 @@ async function Home() {
         <Out href="https://invent.kde.org/sysadmin/repo-metadata/">
           sysadmin/repo-metadata
         </Out>
+        .
+      </p>
+      <h2 class="font-bold text-xl mt-8 mb-4">Usage</h2>
+      <p class="mb-2">
+        https://kde-project.kisaragi-hiu.com/
+        <code class="">{"<projectId>"}</code> will resolve the repo path for you
+        and redirect to the KDE Invent page for that project.
+        <br />
+        https://kde-project.kisaragi-hiu.com/
+        <code class="">{"<projectId>"}</code>/
+        <code class="">{"<whatever>"}</code> will go to {"<whatever>"} under the
+        project's KDE Invent page.
+      </p>
+      <p>
+        For example,{" "}
+        <Out href="https://kde-project.kisaragi-hiu.com/krita/-/blob/master/.kde-ci.yml" />{" "}
+        <br />
+        redirects to{" "}
+        <Out href="https://invent.kde.org/graphics/krita/-/blob/master/.kde-ci.yml" />
         .
       </p>
       <h2 id="groups" class="font-bold text-xl mt-8 mb-4">
