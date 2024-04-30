@@ -16,6 +16,7 @@
     "@cloudflare/workers-types": "^4.20240320.1",
     "@types/bun": "^1.0.11",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^20.11.30"
+    "@types/node": "^20.11.30",
+    "fastest-levenshtein": "^1.0.16"
   }
 }

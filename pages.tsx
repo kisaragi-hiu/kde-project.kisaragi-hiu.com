@@ -3,22 +3,11 @@ import render from "preact-render-to-string";
 import { groupIds, groupedProjects, groups } from "./built/projects.json";
 import { inventUrl } from "./helpers";
 import twindConfig from "./twind.config";
+import { NotFound } from "./page-notfound.tsx";
+import { Out } from "./Out.tsx";
 
 import type { ComponentChild, ComponentChildren } from "preact";
 import type { Group, Project } from "./helpers";
-
-function Out(props: { href: string; children?: ComponentChildren }) {
-  return (
-    <a
-      href={props.href}
-      target="_blank"
-      rel="noreferrer"
-      class="text-link hover:underline"
-    >
-      {props.children || props.href}
-    </a>
-  );
-}
 
 function Chip(props: {
   title?: string;
@@ -108,14 +97,6 @@ function Invalid(id?: string) {
   return (
     <>
       <p>{id ? `${id} is not a valid project ID` : "Invalid project ID"}</p>
-    </>
-  );
-}
-
-function NotFound(id?: string) {
-  return (
-    <>
-      <p>{id ? `ID "${id}" not found` : "ID not found"}</p>
     </>
   );
 }
