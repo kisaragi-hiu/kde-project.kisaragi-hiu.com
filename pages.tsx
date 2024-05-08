@@ -1,10 +1,10 @@
 import { cx, inline, install } from "@twind/core";
 import render from "preact-render-to-string";
+import { Out } from "./Out.tsx";
 import { groupIds, groupedProjects, groups } from "./built/projects.json";
 import { inventUrl } from "./helpers";
-import twindConfig from "./twind.config";
 import { NotFound } from "./page-notfound.tsx";
-import { Out } from "./Out.tsx";
+import twindConfig from "./twind.config";
 
 import type { ComponentChild, ComponentChildren } from "preact";
 import type { Group, Project } from "./helpers";

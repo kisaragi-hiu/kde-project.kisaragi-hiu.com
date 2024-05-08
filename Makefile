@@ -6,6 +6,9 @@ deploy: $(deps)
 lint: $(deps)
 	bunx @biomejs/biome lint "."
 
+format: $(deps)
+	bunx @biomejs/biome check --apply .
+
 build: $(deps)
 	bunx wrangler deploy --outdir built --dry-run
 
