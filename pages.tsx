@@ -56,6 +56,7 @@ function Page(title: string, ...children: ComponentChild[]) {
   const html = render(
     <html lang="en-US">
       <head>
+        <meta name="viewport" content="width=device-width" />
         {/* We don't need meta charset because we've set it in the headers. */}
         <title>{title}</title>
         <meta name="theme-color" content={cBrand1} />
