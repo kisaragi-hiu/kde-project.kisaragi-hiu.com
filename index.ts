@@ -2,33 +2,55 @@ import { idToRepo } from "./built/projects.json";
 import { htmlResponse, inventUrl } from "./helpers";
 import * as Pages from "./pages";
 
-function isValidProject(projectId: string): boolean {
-  return projectId.match(/^[a-z0-9-]+$/);
+/**
+ * Take a string like /a/b/c, then split it into "a" and "b/c".
+ */
+function extractNextComponent(
+  path: string,
+): [string, string] | [undefined, undefined] {
+  const m = path.match(/^\/?([^\/]*)\/?(.*)/);
+  if (!m || m[0] === "/") return [undefined, undefined];
+  return [m[1], m[2]];
 }
 
-async function apiFileExists(repo: string, path: string): boolean {
+function isValidProject(projectId: string): boolean {
+  return !!projectId.match(/^[a-z0-9-]+$/);
+}
+
+async function apiFileExists(repo: string, path: string): Promise<string> {
   const encodedRepo = encodeURIComponent(repo);
   const encodedPath = encodeURIComponent(path);
   const url = `https://invent.kde.org/api/v4/projects/${encodedRepo}/repository/files/${encodedPath}?ref=HEAD`;
   const res = await fetch(url, { method: "HEAD" });
-  return res.ok;
+  if (res.ok) return path;
+  throw undefined;
 }
 
 export default {
   // There are only 4 cases: valid -> found or not, invalid -> provided or not
+  // ... plus one special case, the /-/projectId/<path> route.
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
-    const match = url.pathname.match(/^\/([^\/]*)\/?(.*)/);
+    let searchPathMode = false;
+    let [first, rest] = extractNextComponent(url.pathname);
+
     // Case 1: Project ID invalid (not provided)
-    if (!match || match[0] === "/") {
+    if (typeof first === "undefined" || typeof rest === "undefined") {
       return htmlResponse(await Pages.HomePage());
     }
 
-    const projectId = decodeURIComponent(match[1].toLowerCase());
-    const remainder = match[2];
+    let projectId = decodeURIComponent(first.toLowerCase());
 
-    // TODO: special case: /-/projectId/<path> to find the valid file path for
-    // <path> in <projectId>
+    // Special case: project ID is "-".
+    // Implement the /-/projectId/<path> route.
+    if (projectId === "-") {
+      searchPathMode = true;
+      [first, rest] = extractNextComponent(rest);
+      if (typeof first === "undefined" || typeof rest === "undefined") {
+        return Response.redirect("/", 307);
+      }
+      projectId = decodeURIComponent(first.toLowerCase());
+    }
 
     // Case 2: Project ID invalid (all other cases)
     if (!isValidProject(projectId)) {
@@ -40,7 +62,18 @@ export default {
     const repo = (idToRepo as Record<string, string>)[projectId];
     // Case 3: Project ID valid and found
     if (typeof repo === "string") {
-      const newUrl = inventUrl(repo, remainder, url.search, url.hash);
+      if (searchPathMode && rest !== "") {
+        // Try: /-/kmail/editor/kmcomposerwin.cpp
+        // Try: /-/kmail/src/editor/kmcomposerwin.cpp
+        const foundPath = await Promise.any([
+          apiFileExists(repo, rest),
+          apiFileExists(repo, "src/" + rest),
+        ]).catch(() => undefined);
+        const newUrl = inventUrl(repo, "-/blob/HEAD/" + foundPath || "");
+        return Response.redirect(newUrl, 307);
+      }
+      // Normal mode, simple redirect
+      const newUrl = inventUrl(repo, rest, url.search, url.hash);
       return Response.redirect(newUrl, 307);
     }
 
