@@ -2,6 +2,18 @@ import { idToRepo } from "./built/projects.json";
 import { htmlResponse, inventUrl } from "./helpers";
 import * as Pages from "./pages";
 
+function isValidProject(projectId: string): boolean {
+  return projectId.match(/^[a-z0-9-]+$/);
+}
+
+async function apiFileExists(repo: string, path: string): boolean {
+  const encodedRepo = encodeURIComponent(repo);
+  const encodedPath = encodeURIComponent(path);
+  const url = `https://invent.kde.org/api/v4/projects/${encodedRepo}/repository/files/${encodedPath}?ref=HEAD`;
+  const res = await fetch(url, { method: "HEAD" });
+  return res.ok;
+}
+
 export default {
   // There are only 4 cases: valid -> found or not, invalid -> provided or not
   async fetch(request: Request): Promise<Response> {
@@ -14,8 +26,12 @@ export default {
 
     const projectId = decodeURIComponent(match[1].toLowerCase());
     const remainder = match[2];
+
+    // TODO: special case: /-/projectId/<path> to find the valid file path for
+    // <path> in <projectId>
+
     // Case 2: Project ID invalid (all other cases)
-    if (!projectId.match(/^[a-z0-9-]+$/)) {
+    if (!isValidProject(projectId)) {
       return htmlResponse(Pages.InvalidPage(projectId), {
         status: 400,
       });
