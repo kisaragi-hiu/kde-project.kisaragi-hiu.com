@@ -13,3 +13,7 @@ Runs on Cloudflare Workers because it's so easy to deploy.
 
 - Entry point: index.ts
 - Dev mode entry point: bun.ts (using Bun.serve as my development mode)
+
+## Data
+
+The data is directly taken from [repo-metadata](https://invent.kde.org/sysadmin/repo-metadata/) at build time. A Make target clones the repository, then `process-repo-metadata.ts` is run on it to produce `built/projects.json`, which is the data that's used at runtime.
