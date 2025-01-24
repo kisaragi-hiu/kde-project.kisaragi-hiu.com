@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Run at 4:25 UTC at every 10th day of the month
+    # Point is to do it monthly; the exact time is picked semi-randomly to
+    # spread out GitHub and Invent's load
+    - cron: "25 4 10 * *"
 
 jobs:
   "build":
