@@ -80,7 +80,7 @@ function Page(title: string, ...children: ComponentChild[]) {
               Quick redirector for KDE Projects
             </h1>
             <p>
-              © 2024 <Out href="https://kisaragi-hiu.com/">Kisaragi Hiu</Out> @{" "}
+              © 2025 <Out href="https://kisaragi-hiu.com/">Kisaragi Hiu</Out> @{" "}
               <Out href="https://github.com/kisaragi-hiu/kde-project.kisaragi-hiu.com">
                 GitHub
               </Out>
