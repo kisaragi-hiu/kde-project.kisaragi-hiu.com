@@ -108,7 +108,10 @@ export default {
       ).catch(() => undefined);
       if (foundUrl !== undefined) {
         console.log({ foundUrl, urlsToTry });
-        return Response.redirect(foundUrl, 307);
+        return Response.redirect(
+          foundUrl + [url.search, url.hash].join(""),
+          307,
+        );
       } else {
         return htmlResponse(Pages.RejectedPage(urlsToTry[0]));
       }
