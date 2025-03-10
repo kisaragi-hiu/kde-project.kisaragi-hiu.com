@@ -130,13 +130,19 @@ async function Home() {
       </p>
       <h2 class="font-bold text-xl mt-8 mb-4">Usage</h2>
       <p class="mb-2">
-        https://kde-project.kisaragi-hiu.com/
-        <code class="">{"<projectId>"}</code> will resolve the repo path for you
-        and redirect to the KDE Invent page for that project.
+        <code class="">
+          https://kde-project.kisaragi-hiu.com/{"<projectId>"}
+        </code>{" "}
+        will resolve the repo path for you and redirect to the KDE Invent page
+        for that project.
         <br />
-        https://kde-project.kisaragi-hiu.com/
-        <code class="">{"<projectId>"}</code>/<code class="">{"<path>"}</code>{" "}
-        will go to {"<path>"} within the project's repository.
+        <code>
+          https://kde-project.kisaragi-hiu.com/{"<projectId>"}/{"<path>"}[:
+          {"<line>"}]
+        </code>{" "}
+        will go to {"<path>"} within the project's repository; if {"<line>"} is
+        given it'll also try to jump to that line.
+        <br />
       </p>
       <p>
         For example,{" "}
