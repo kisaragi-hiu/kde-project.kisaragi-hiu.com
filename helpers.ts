@@ -42,6 +42,13 @@ export function htmlResponse(
   });
 }
 
-export function inventUrl(repo: string, remainder = "", ...etc: string[]) {
+/**
+ * Return URL to KDE Invent for `repo`, joining `remainder` and everything else afterwards.
+ */
+export function inventUrl(
+  repo: string,
+  remainder = "",
+  ...etc: (string | undefined)[]
+) {
   return `https://invent.kde.org/${repo}/${remainder}` + etc.join("");
 }

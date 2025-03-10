@@ -13,6 +13,19 @@ function extractNextComponent(
   return [m[1], m[2]];
 }
 
+/**
+ * Take a string like "foo:123" and return ["foo", "123"].
+ * Specifically, split the last component of `path` and return it as a separate argument.
+ * The goal is to later transform it into #L123.
+ */
+function pathSplitLine(path: string): [string, string] | [string, undefined] {
+  const lastPos = [...path.matchAll(/:/g)].map((m) => m.index).at(-1);
+  if (lastPos === undefined) {
+    return [path, undefined];
+  }
+  return [path.slice(0, lastPos), path.slice(lastPos + 1)];
+}
+
 function isValidProject(projectId: string): boolean {
   return !!projectId.match(/^[a-z0-9-]+$/);
 }
@@ -32,7 +45,8 @@ export default {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     let searchPathMode = false;
-    let [first, rest] = extractNextComponent(url.pathname);
+    const [pathWithoutLine, line] = pathSplitLine(url.pathname);
+    let [first, rest] = extractNextComponent(pathWithoutLine);
 
     // Case 1: Project ID invalid (not provided)
     if (typeof first === "undefined" || typeof rest === "undefined") {
@@ -69,7 +83,11 @@ export default {
           apiFileExists(repo, rest),
           apiFileExists(repo, "src/" + rest),
         ]).catch(() => undefined);
-        const newUrl = inventUrl(repo, "-/blob/HEAD/" + foundPath || "");
+        const newUrl = inventUrl(
+          repo,
+          "-/blob/HEAD/" + foundPath || "",
+          line && `#L${line}`,
+        );
         return Response.redirect(newUrl, 307);
       }
       // Normal mode, simple redirect
