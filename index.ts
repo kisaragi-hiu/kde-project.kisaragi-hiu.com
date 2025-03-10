@@ -107,7 +107,6 @@ export default {
         urlsToTry.map(throwIfUrlRedirects),
       ).catch(() => undefined);
       if (foundUrl !== undefined) {
-        console.log({ foundUrl, urlsToTry });
         return Response.redirect(
           foundUrl + [url.search, url.hash].join(""),
           307,
