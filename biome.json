@@ -22,6 +22,7 @@
       "style": {
         "useTemplate": "off",
         "noNonNullAssertion": "off",
+        "noUselessElse": "off",
         "useNamingConvention": {
           "level": "warn",
           "options": { "strictCase": true, "requireAscii": false }
