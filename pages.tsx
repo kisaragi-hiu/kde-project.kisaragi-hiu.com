@@ -37,7 +37,7 @@ function BreezeButton(props: { href: string; children: ComponentChildren }) {
         "focus-visible:border-brand-9 focus-visible:bg-brand-3",
         "text-inherit rounded-sm",
         "-ml-2 px-2 py-1.5",
-        "flex flex-col items-start justify-start",
+        "flex flex-col items-start justify-start"
       )}
       href={props.href}
     >
@@ -72,7 +72,7 @@ function Page(title: string, ...children: ComponentChild[]) {
           class={cx(
             "pt-10 pb-2 mb-4",
             "scroll-mt-24 bg-[#31363B]",
-            "border-b border-neutral-9",
+            "border-b border-neutral-9"
           )}
         >
           <div class="max-w-7xl mx-auto px-6 md:px-14">
@@ -89,9 +89,24 @@ function Page(title: string, ...children: ComponentChild[]) {
         </div>
         <main class="max-w-7xl mx-auto px-6 md:px-14 pb-8">{...children}</main>
       </body>
-    </html>,
+    </html>
   );
   return inline("<!DOCTYPE html>" + html);
+}
+
+function GitLabRejected(url: string | URL) {
+  return (
+    <>
+      <p>
+        Invent would redirect if navigated to {url}. Perhaps there's a typo?
+      </p>
+      <p>
+        <a href={url} rel="noreferrer" class="text-link hover:underline">
+          Open {url} anyways
+        </a>
+      </p>
+    </>
+  );
 }
 
 function Invalid(id?: string) {
@@ -189,12 +204,14 @@ async function Home() {
   );
 }
 
+export const RejectedPage = (url: string | URL) =>
+  Page("Invalid path | Kisaragi's KDE Project Redirector", GitLabRejected(url));
 export const InvalidPage = (id?: string) =>
   Page("Invalid project ID | Kisaragi's KDE Project Redirector", Invalid(id));
 export const NotFoundPage = (id: string) =>
   Page(
     "Project ID Not Found | Kisaragi's KDE Project Redirector",
-    NotFound(id),
+    NotFound(id)
   );
 export const HomePage = async () =>
   Page("Kisaragi's KDE Project Redirector", await Home());

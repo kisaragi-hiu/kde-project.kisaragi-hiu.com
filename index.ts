@@ -30,6 +30,21 @@ function isValidProject(projectId: string): boolean {
   return !!projectId.match(/^[a-z0-9-]+$/);
 }
 
+/**
+ * Check if `url` navigates without redirection.
+ * GitLab responds to invalid paths by trying to do helpful redirects, which is
+ * great for direct entry, but in this case we want to catch that and display
+ * our own error message. So we use this to avoid that.
+ */
+async function redirectIfValid(url: string | URL) {
+  const result = await fetch(url, { method: "HEAD", redirect: "manual" });
+  if (result.status === 200) {
+    return Response.redirect(url, 307);
+  } else {
+    return htmlResponse(Pages.RejectedPage(url));
+  }
+}
+
 async function apiFileExists(repo: string, path: string): Promise<string> {
   const encodedRepo = encodeURIComponent(repo);
   const encodedPath = encodeURIComponent(path);
@@ -88,11 +103,11 @@ export default {
           "-/blob/HEAD/" + foundPath || "",
           line && `#L${line}`,
         );
-        return Response.redirect(newUrl, 307);
+        return redirectIfValid(newUrl);
       }
       // Normal mode, simple redirect
       const newUrl = inventUrl(repo, rest, url.search, url.hash);
-      return Response.redirect(newUrl, 307);
+      return redirectIfValid(newUrl);
     }
 
     // Case 4: Project ID valid but not found
