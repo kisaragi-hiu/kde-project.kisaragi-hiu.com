@@ -31,27 +31,27 @@ function isValidProject(projectId: string): boolean {
 }
 
 /**
- * Check if `url` navigates without redirection.
+ * Check if `url` navigates with redirection.
  * GitLab responds to invalid paths by trying to do helpful redirects, which is
  * great for direct entry, but in this case we want to catch that and display
  * our own error message. So we use this to avoid that.
  */
-async function redirectIfValid(url: string | URL) {
+async function doesRedirect(url: string | URL) {
   const result = await fetch(url, { method: "HEAD", redirect: "manual" });
-  if (result.status === 200) {
-    return Response.redirect(url, 307);
-  } else {
-    return htmlResponse(Pages.RejectedPage(url));
-  }
+  return result.status !== 200;
 }
 
-async function apiFileExists(repo: string, path: string): Promise<string> {
-  const encodedRepo = encodeURIComponent(repo);
-  const encodedPath = encodeURIComponent(path);
-  const url = `https://invent.kde.org/api/v4/projects/${encodedRepo}/repository/files/${encodedPath}?ref=HEAD`;
-  const res = await fetch(url, { method: "HEAD" });
-  if (res.ok) return path;
-  throw undefined;
+/**
+ * Check if `url` redirects.
+ * GitLab responds to invalid paths by trying to do helpful redirects, which is
+ * great for direct entry, but in this case we want to catch that and display
+ * our own error message. So we use this to avoid that.
+ */
+async function throwIfUrlRedirects(url: string | URL): Promise<string | URL> {
+  if (await doesRedirect(url)) {
+    throw undefined;
+  }
+  return url;
 }
 
 export default {
@@ -59,7 +59,6 @@ export default {
   // ... plus one special case, the /-/projectId/<path> route.
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
-    let searchPathMode = false;
     const [pathWithoutLine, line] = pathSplitLine(url.pathname);
     let [first, rest] = extractNextComponent(pathWithoutLine);
 
@@ -71,9 +70,9 @@ export default {
     let projectId = decodeURIComponent(first.toLowerCase());
 
     // Special case: project ID is "-".
-    // Implement the /-/projectId/<path> route.
+    // For compatibility, get rid of it but otherwise behave as normal.
+    // (This is not recursive.)
     if (projectId === "-") {
-      searchPathMode = true;
       [first, rest] = extractNextComponent(rest);
       if (typeof first === "undefined" || typeof rest === "undefined") {
         return Response.redirect("/", 307);
@@ -88,26 +87,31 @@ export default {
       });
     }
 
+    // Find the repo based on the projectId
     const repo = (idToRepo as Record<string, string>)[projectId];
     // Case 3: Project ID valid and found
     if (typeof repo === "string") {
-      if (searchPathMode && rest !== "") {
-        // Try: /-/kmail/editor/kmcomposerwin.cpp
-        // Try: /-/kmail/src/editor/kmcomposerwin.cpp
-        const foundPath = await Promise.any([
-          apiFileExists(repo, rest),
-          apiFileExists(repo, "src/" + rest),
-        ]).catch(() => undefined);
-        const newUrl = inventUrl(
-          repo,
-          "-/blob/HEAD/" + foundPath || "",
-          line && `#L${line}`,
-        );
-        return redirectIfValid(newUrl);
+      // Only the project ID is specified. We already checked that it's there
+      // in `idToRepo` and don't need to consult Invent whether it exists or
+      // not. So we can directly redirect without other checks.
+      if (rest === "") {
+        return Response.redirect(inventUrl(repo, url.search, url.hash));
       }
-      // Normal mode, simple redirect
-      const newUrl = inventUrl(repo, rest, url.search, url.hash);
-      return redirectIfValid(newUrl);
+
+      // Try: /kmail/editor/kmcomposerwin.cpp
+      // Try: /kmail/src/editor/kmcomposerwin.cpp
+      const urlsToTry = ["-/blob/HEAD/", "-/blob/HEAD/src/"].map((part) =>
+        inventUrl(repo, part, rest, line && `#L${line}`),
+      );
+      const foundUrl = await Promise.any(
+        urlsToTry.map(throwIfUrlRedirects),
+      ).catch(() => undefined);
+      if (foundUrl !== undefined) {
+        console.log({ foundUrl, urlsToTry });
+        return Response.redirect(foundUrl, 307);
+      } else {
+        return htmlResponse(Pages.RejectedPage(urlsToTry[0]));
+      }
     }
 
     // Case 4: Project ID valid but not found
