@@ -37,7 +37,7 @@ for (const metafile of metafiles) {
       ? "docs-and-websites"
       : group;
 
-  const { name, description, identifier } = metadata;
+  const { name, description, identifier, repoactive } = metadata;
 
   idToRepo[identifier] = repopath;
   projects.push({
@@ -45,6 +45,7 @@ for (const metafile of metafiles) {
     description,
     identifier,
     repopath,
+    repoactive,
     group: morphedGroup,
   });
 }

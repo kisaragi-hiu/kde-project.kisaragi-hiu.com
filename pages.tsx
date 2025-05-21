@@ -189,15 +189,27 @@ async function Home() {
               {projects.map((project) => (
                 <li>
                   <BreezeButton href={inventUrl(project.repopath)}>
-                    <div>
-                      <span class="font-bold">{project.identifier}</span>
-                      <span>・{project.name}</span>
+                    <div class="flex justify-between w-full">
+                      <div>
+                        <div>
+                          <span class="font-bold">{project.identifier}</span>
+                          <span>・{project.name}</span>
+                          {project.repoactive || (
+                            <span>
+                              ・
+                              <span class="bg-error-4 p-1 rounded-lg">
+                                inactive
+                              </span>
+                            </span>
+                          )}
+                        </div>
+                        {project.description.length === 0 ? (
+                          <div class="italic">No description</div>
+                        ) : (
+                          project.description
+                        )}
+                      </div>
                     </div>
-                    {project.description.length === 0 ? (
-                      <div class="italic">No description</div>
-                    ) : (
-                      project.description
-                    )}
                   </BreezeButton>
                 </li>
               ))}

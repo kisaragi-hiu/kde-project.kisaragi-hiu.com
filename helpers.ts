@@ -7,6 +7,7 @@ export interface ProjectMetadata {
     product: string;
     component?: string;
   };
+  repoactive: boolean;
 }
 
 /** Our project representation */
