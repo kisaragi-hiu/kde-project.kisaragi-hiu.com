@@ -3,7 +3,7 @@
 A redirection service from a KDE project ID to KDE Invent. Probably most useful for KDE translators, who sees the project IDs the most (I think).
 
 - https://kde-project.kisaragi-hiu.com/websites-hugo-kde redirects to https://invent.kde.org/websites/hugo-kde
-- https://kde-project.kisaragi-hiu.com/krita/-/blob/master/.kde-ci.yml redirects to https://invent.kde.org/graphics/krita/-/blob/master/.kde-ci.yml
+- https://kde-project.kisaragi-hiu.com/krita/blob/master/.kde-ci.yml redirects to https://invent.kde.org/graphics/krita/-/blob/master/.kde-ci.yml
 
 This is IMO the one thing missing from projects.kde.org/api.
 
